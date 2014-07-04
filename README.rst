@@ -3,7 +3,10 @@ hat-trie
 
 HAT-Trie structure for Python (2.x and 3.x).
 
-Uses `hat-trie`_ C library.
+This package is a Python wrapper for `hat-trie`_ C library.
+
+.. image:: https://travis-ci.org/kmike/hat-trie.png?branch=master
+    :target: https://travis-ci.org/kmike/hat-trie
 
 .. _hat-trie: https://github.com/dcjones/hat-trie
 
@@ -14,6 +17,8 @@ Installation
 
     pip install hat-trie
 
+Note that it currently requires Cython to build.
+
 Usage
 =====
 
@@ -23,7 +28,15 @@ Create a new trie::
     >>> trie = Trie()
 
 ``trie`` variable is a dict-like object that support unicode
-keys and integer values and stores them efficiently.
+keys and can have any Python object as a value. For keys that share prefixes
+it usually uses less memory than Python dict.
+
+There is also ``hat_trie.IntTrie`` which only supports positive
+integers as values. It can be more efficient when you don't need
+arbitrary objects as values. For example, if you need to store float
+values then storing them in an array (either numpy or stdlib's ``array.array`)
+and using IntTrie values as indices could be more memory efficient
+than storing Python float objects directly in ``hat_trie.Trie``.
 
 Currently implemented methods are:
 
@@ -31,11 +44,12 @@ Currently implemented methods are:
 * __setitem__()
 * __contains__()
 * __len__()
+* get()
 * setdefault()
 * keys()
 * iterkeys()
 
-Other methods are not implemented.
+Other methods are not implemented - contributions are welcome!
 
 Performance
 ===========
@@ -72,20 +86,21 @@ it also supports fast inserts unlike datrie. On the other hand,
 datrie has more features (e.g. better iteration support and richer API);
 datrie is also more memory efficient.
 
+If you need a memory efficient data structure and don't need inserts
+then marisa-trie_ or DAWG_ should work better.
+
 .. _datrie: https://github.com/kmike/datrie
+.. _marisa-trie: https://github.com/kmike/marisa-trie
+.. _DAWG: https://github.com/kmike/DAWG
 
 Contributing
 ============
 
-Development happens at github and bitbucket:
+Development happens at github:
 
-* https://github.com/kmike/datrie
-* https://bitbucket.org/kmike/datrie
+* https://github.com/kmike/hat-trie
 
-The main issue tracker is at github.
-
-Feel free to submit ideas, bugs, pull requests (git or hg) or
-regular patches.
+Feel free to submit ideas, bugs, pull requests or regular patches.
 
 
 Running tests and benchmarks
@@ -112,8 +127,10 @@ Authors & Contributors
 ----------------------
 
 * Mikhail Korobov <kmike84@gmail.com>
+* Brandon Forehand <b4hand@users.sf.net>
+* https://github.com/yflau
 
-This module is based on `hat-trie`_ C library by Daniel Jones & contributors.
+This module wraps `hat-trie`_ C library by Daniel Jones & contributors.
 
 License
 =======
